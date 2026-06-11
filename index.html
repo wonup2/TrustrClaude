@@ -244,8 +244,19 @@
   </div>
 
   <!-- SCREEN: BROWSE -->
-  <div id="screen-browse" class="screen">
-    <div class="search-bar">
+  <div id="screen-browse" class="screen active">
+    <div style="padding:16px 20px 4px;">
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:2px;">Hey, Milan 👋</div>
+      <div style="font-size:21px;font-weight:700;color:var(--text-primary);line-height:1.2;">Need something?<br>Borrow it from a classmate!</div>
+    </div>
+    <div style="margin:12px 20px 0;background:var(--teal-50);border-radius:var(--radius-lg);padding:14px 16px;display:flex;align-items:center;gap:12px;">
+      <div style="font-size:28px;">🤝</div>
+      <div>
+        <div style="font-size:13px;font-weight:600;color:var(--teal-600);">8 items ready to borrow</div>
+        <div style="font-size:12px;color:var(--teal-800);margin-top:2px;">Listed by students at your school</div>
+      </div>
+    </div>
+    <div class="search-bar" style="margin-top:12px;">
       <span class="search-icon" style="font-size:14px;">🔍</span>
       <input type="text" placeholder="Search items…" id="search-input" oninput="filterItems()">
     </div>
@@ -371,9 +382,9 @@
   <!-- SCREEN: PROFILE -->
   <div id="screen-profile" class="screen">
     <div class="profile-hero">
-      <div class="profile-avatar" id="profile-avatar">JL</div>
-      <div class="profile-name" id="profile-name">Jordan Lee</div>
-      <div class="profile-handle" id="profile-handle">@jordanlee · Grade 10</div>
+      <div class="profile-avatar" id="profile-avatar">MK</div>
+      <div class="profile-name" id="profile-name">Milan Kuruvilla</div>
+      <div class="profile-handle" id="profile-handle">@milankuruvilla · Grade 10</div>
       <div class="trust-ring">🛡 Trust score <span id="profile-trust">92</span></div>
     </div>
     <div class="stats-row">
@@ -384,6 +395,55 @@
     <div class="profile-section">
       <div class="profile-section-title">My listings</div>
       <div id="my-listings"></div>
+    </div>
+
+    <div class="profile-section" style="padding-top:0;">
+      <div class="profile-section-title" style="color:var(--coral-600);">&#9888; Due for return</div>
+
+      <div style="background:var(--coral-50);border:1px solid var(--coral-100);border-radius:var(--radius-lg);padding:14px 16px;margin-bottom:10px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="font-size:26px;">&#128247;</div>
+          <div style="flex:1;">
+            <div style="font-size:14px;font-weight:600;color:var(--text-primary);">Canon DSLR Camera</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Borrowed from Priya Sharma</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:12px;font-weight:700;color:var(--coral-600);">Today</div>
+            <div style="font-size:11px;color:var(--coral-400);">June 10</div>
+          </div>
+        </div>
+        <button class="btn btn-coral btn-block" style="margin-top:12px;font-size:13px;" onclick="showToast('Return request sent to Priya ✓')">&#8617; Return now</button>
+      </div>
+
+      <div style="background:var(--amber-50);border:1px solid var(--amber-100);border-radius:var(--radius-lg);padding:14px 16px;margin-bottom:10px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="font-size:26px;">&#9917;</div>
+          <div style="flex:1;">
+            <div style="font-size:14px;font-weight:600;color:var(--text-primary);">Soccer cleats (size 9)</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Borrowed from Chris Park</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:12px;font-weight:700;color:var(--amber-600);">Tomorrow</div>
+            <div style="font-size:11px;color:var(--amber-400);">June 11</div>
+          </div>
+        </div>
+        <button class="btn btn-block" style="margin-top:12px;font-size:13px;background:var(--amber-50);color:var(--amber-600);border:1px solid var(--amber-100);" onclick="showToast('Return request sent to Chris ✓')">&#8617; Return now</button>
+      </div>
+
+      <div style="background:var(--gray-50);border:0.5px solid var(--gray-100);border-radius:var(--radius-lg);padding:14px 16px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="font-size:26px;">&#127928;</div>
+          <div style="flex:1;">
+            <div style="font-size:14px;font-weight:600;color:var(--text-primary);">Guitar (acoustic)</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Borrowed from Zoe Ellis</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:12px;font-weight:600;color:var(--gray-600);">Jun 14</div>
+            <div style="font-size:11px;color:var(--gray-400);">3 days left</div>
+          </div>
+        </div>
+        <button class="btn btn-secondary btn-block" style="margin-top:12px;font-size:13px;" onclick="showToast('Return request sent to Zoe ✓')">&#8617; Return now</button>
+      </div>
     </div>
   </div>
 
@@ -474,8 +534,8 @@
 
 <script>
 try {
-const ME = 'Jordan Lee';
-const ME_HANDLE = '@jordanlee';
+const ME = 'Milan Kuruvilla';
+const ME_HANDLE = '@milankuruvilla';
 
 const ITEMS = [
   { id:1, name:'TI-84 Plus Calculator', emoji:'📐', owner:'Maya Chen', ownerInitials:'MC', category:'School', condition:'Like new', maxDays:7, available:true, trust:96, notes:'Please handle carefully, bring to Room 204 to pick up.' },
@@ -758,7 +818,7 @@ function submitListing() {
   const condition = document.getElementById('list-condition').value;
   MY_ITEMS.push({ id: 200 + MY_ITEMS.length, name, emoji: selectedEmoji, category: cat, condition });
   ITEMS.push({
-    id: 100 + ITEMS.length, name, emoji: selectedEmoji, owner: ME, ownerInitials: 'JL',
+    id: 100 + ITEMS.length, name, emoji: selectedEmoji, owner: ME, ownerInitials: 'MK',
     category: cat, condition, maxDays: 7, available: true, trust: 92,
     notes: document.getElementById('list-notes').value
   });
