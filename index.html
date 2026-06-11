@@ -539,11 +539,10 @@
 <div class="toast" id="toast"></div>
 
 <script>
-try {
-const ME = 'Milan Kuruvilla';
-const ME_HANDLE = '@milankuruvilla';
+var ME = 'Milan Kuruvilla';
+var ME_HANDLE = '@milankuruvilla';
 
-const ITEMS = [
+var ITEMS = [
   { id:1, name:'TI-84 Plus Calculator', emoji:'📐', owner:'Maya Chen', ownerInitials:'MC', category:'School', condition:'Like new', maxDays:7, available:true, trust:96, notes:'Please handle carefully, bring to Room 204 to pick up.' },
   { id:2, name:'Canon DSLR Camera', emoji:'📷', owner:'Priya Sharma', ownerInitials:'PS', category:'Tech', condition:'Good', maxDays:3, available:true, trust:88, notes:'Comes with kit lens. Return with the lens cap on.' },
   { id:3, name:'The Great Gatsby (novel)', emoji:'📚', owner:'Alex Kim', ownerInitials:'AK', category:'Books', condition:'Good', maxDays:14, available:false, trust:91, notes:'No highlighting please!' },
@@ -554,27 +553,27 @@ const ITEMS = [
   { id:8, name:'Guitar (acoustic)', emoji:'🎸', owner:'Zoe Ellis', ownerInitials:'ZE', category:'Music', condition:'Good', maxDays:7, available:true, trust:82, notes:'Be gentle with the tuning pegs.' },
 ];
 
-const MY_ITEMS = [
+var MY_ITEMS = [
   { id:101, name:'Python Programming Book', emoji:'📚', category:'Books', condition:'Good' },
   { id:102, name:'Lab Safety Goggles', emoji:'🔬', category:'Science', condition:'Like new' },
 ];
 
-let borrowActivities = [
+var borrowActivities = [
   { id:'A1', itemId:2, itemName:'Canon DSLR Camera', emoji:'📷', fromName:'Priya Sharma', fromInitials:'PS', status:'active', dueDate:'June 14', requestDate:'June 8', duration:'3 days', msg:'Need it for the yearbook club shoot!', lenderSide:false },
   { id:'A2', itemId:5, itemName:'Soccer cleats (size 9)', emoji:'⚽', fromName:'Chris Park', fromInitials:'CP', status:'pending', dueDate:'June 12', requestDate:'June 10', duration:'2 days', msg:'For intramurals on Thursday', lenderSide:false },
   { id:'A3', itemId:6, itemName:'Portable Bluetooth Speaker', emoji:'🎵', fromName:'Dana Wright', fromInitials:'DW', status:'returned', dueDate:'June 7', requestDate:'June 5', duration:'1 day', msg:'For a project presentation', lenderSide:false },
 ];
 
-let lenderInbox = [
+var lenderInbox = [
   { id:'L1', itemId:101, itemName:'Python Programming Book', emoji:'📚', borrowerName:'Riley Johnson', borrowerInitials:'RJ', status:'pending', requestDate:'June 9', duration:'1 week', msg:'Reading for AP CS over the weekend!' },
   { id:'L2', itemId:102, itemName:'Lab Safety Goggles', emoji:'🔬', borrowerName:'Finn O\'Brien', borrowerInitials:'FO', status:'active', requestDate:'June 7', duration:'2 days', msg:'For the chem lab on Monday', dueDate:'June 12' },
 ];
 
-let currentItem = null;
-let returnTargetId = null;
-let confirmReturnTargetId = null;
-let selectedEmoji = '📚';
-let activeFilter = 'All';
+var currentItem = null;
+var returnTargetId = null;
+var confirmReturnTargetId = null;
+var selectedEmoji = '📚';
+var activeFilter = 'All';
 
 function navTo(screen) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -849,7 +848,7 @@ function openNotifs() {
   showToast('No new notifications');
 }
 
-let toastTimer;
+var toastTimer;
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
@@ -863,7 +862,6 @@ document.querySelectorAll('.modal-overlay').forEach(m => {
 });
 
 try { renderProfile(); } catch(e) {}
-} catch(globalErr) { console.warn('Trustr init error:', globalErr); }
 </script>
 </body>
 </html>
