@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trustr</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --teal-50: #E1F5EE; --teal-100: #9FE1CB; --teal-400: #1D9E75; --teal-600: #0F6E56; --teal-800: #085041;
+    --coral-50: #FAECE7; --coral-100: #F5C4B3; --coral-400: #D85A30; --coral-600: #993C1D; --coral-800: #712B13;
+    --amber-50: #FAEEDA; --amber-100: #FAC775; --amber-400: #BA7517; --amber-600: #854F0B;
+    --blue-50: #E6F1FB; --blue-100: #B5D4F4; --blue-400: #378ADD; --blue-600: #185FA5; --blue-800: #0C447C;
+    --red-50: #FCEBEB; --red-100: #F7C1C1; --red-400: #E24B4A; --red-600: #A32D2D;
+    --gray-50: #F1EFE8; --gray-100: #D3D1C7; --gray-200: #B4B2A9; --gray-400: #888780; --gray-600: #5F5E5A; --gray-800: #444441;
+    --bg: #F6F6F3;
+    --surface: #FFFFFF;
+    --text-primary: #1A1A18;
+    --text-secondary: #5F5E5A;
+    --text-muted: #888780;
+    --border: rgba(0,0,0,0.10);
+    --border-md: rgba(0,0,0,0.15);
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --nav-h: 64px;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    margin: 0;
+  }
+  .app-shell {
+    max-width: 480px;
+    width: 100%;
+    min-height: 100vh;
+    margin: 0 auto;
+    background: var(--bg);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  /* Top bar */
+  .topbar {
+    background: var(--surface);
+    border-bottom: 0.5px solid var(--border);
+    padding: 14px 20px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .topbar-logo { font-size: 22px; font-weight: 700; color: var(--teal-600); letter-spacing: -0.5px; }
+  .topbar-logo span { color: var(--coral-400); }
+  .topbar-actions { display: flex; gap: 8px; }
+  .icon-btn { width: 36px; height: 36px; border-radius: 50%; border: 0.5px solid var(--border-md); background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text-secondary); font-size: 18px; transition: background 0.15s; }
+  .icon-btn:hover { background: var(--gray-50); }
+
+  /* Screens */
+  .screen { display: none; flex-direction: column; flex: 1; padding-bottom: calc(var(--nav-h) + 12px); }
+  .screen.active { display: flex; }
+
+  /* Bottom nav */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 480px;
+    height: var(--nav-h);
+    background: var(--surface);
+    border-top: 0.5px solid var(--border);
+    display: flex;
+    z-index: 20;
+  }
+  .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; cursor: pointer; color: var(--text-muted); font-size: 10px; font-weight: 500; letter-spacing: 0.3px; transition: color 0.15s; border: none; background: transparent; }
+  .nav-item i { font-size: 22px; }
+  .nav-item.active { color: var(--teal-600); }
+  .nav-item:hover { color: var(--teal-400); }
+
+  /* Section headers */
+  .section-head { padding: 20px 20px 10px; display: flex; align-items: center; justify-content: space-between; }
+  .section-title { font-size: 18px; font-weight: 600; color: var(--text-primary); }
+  .section-sub { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+
+  /* Search bar */
+  .search-bar { margin: 12px 20px 4px; position: relative; }
+  .search-bar input { width: 100%; padding: 10px 12px 10px 38px; border-radius: var(--radius-md); border: 0.5px solid var(--border-md); background: var(--surface); font-size: 14px; color: var(--text-primary); outline: none; }
+  .search-bar input:focus { border-color: var(--teal-400); }
+  .search-bar .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 16px; pointer-events: none; }
+
+  /* Filter chips */
+  .filter-row { display: flex; gap: 8px; padding: 10px 20px; overflow-x: auto; scrollbar-width: none; }
+  .filter-row::-webkit-scrollbar { display: none; }
+  .chip { padding: 6px 14px; border-radius: 999px; border: 0.5px solid var(--border-md); background: var(--surface); font-size: 13px; color: var(--text-secondary); cursor: pointer; white-space: nowrap; transition: all 0.15s; }
+  .chip.active { background: var(--teal-600); color: #fff; border-color: var(--teal-600); }
+
+  /* Item cards */
+  .items-grid { display: flex; flex-direction: column; gap: 12px; padding: 8px 20px 4px; }
+  .item-card { background: var(--surface); border-radius: var(--radius-lg); border: 0.5px solid var(--border); padding: 16px; cursor: pointer; transition: border-color 0.15s; display: flex; gap: 14px; }
+  .item-card:hover { border-color: var(--teal-400); }
+  .item-emoji { width: 54px; height: 54px; border-radius: var(--radius-md); background: var(--teal-50); display: flex; align-items: center; justify-content: center; font-size: 26px; flex-shrink: 0; }
+  .item-info { flex: 1; min-width: 0; }
+  .item-name { font-size: 15px; font-weight: 600; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .item-owner { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+  .item-tags { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+  .tag { font-size: 11px; padding: 3px 8px; border-radius: 999px; font-weight: 500; }
+  .tag-cat { background: var(--teal-50); color: var(--teal-600); }
+  .tag-avail { background: var(--teal-50); color: var(--teal-600); }
+  .tag-busy { background: var(--coral-50); color: var(--coral-600); }
+  .trust-badge { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0; }
+  .trust-score { font-size: 19px; font-weight: 700; color: var(--teal-600); line-height: 1; }
+  .trust-label { font-size: 10px; color: var(--text-muted); letter-spacing: 0.5px; text-transform: uppercase; }
+
+  /* Buttons */
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 10px 20px; border-radius: var(--radius-md); font-size: 14px; font-weight: 500; cursor: pointer; border: 0.5px solid transparent; transition: all 0.15s; }
+  .btn-primary { background: var(--teal-600); color: #fff; border-color: var(--teal-600); }
+  .btn-primary:hover { background: var(--teal-800); border-color: var(--teal-800); }
+  .btn-secondary { background: var(--surface); color: var(--text-secondary); border-color: var(--border-md); }
+  .btn-secondary:hover { background: var(--gray-50); }
+  .btn-danger { background: var(--red-50); color: var(--red-600); border-color: var(--red-100); }
+  .btn-danger:hover { background: var(--red-100); }
+  .btn-coral { background: var(--coral-600); color: #fff; border-color: var(--coral-600); }
+  .btn-coral:hover { background: var(--coral-800); }
+  .btn-block { width: 100%; }
+  .btn-sm { padding: 7px 14px; font-size: 13px; }
+
+  /* Modal overlay */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 100; align-items: flex-end; justify-content: center; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--surface); border-radius: var(--radius-lg) var(--radius-lg) 0 0; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; padding: 24px 20px 32px; }
+  .modal-handle { width: 36px; height: 4px; background: var(--gray-100); border-radius: 999px; margin: 0 auto 20px; }
+  .modal-title { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .modal-sub { font-size: 14px; color: var(--text-muted); margin-bottom: 20px; }
+
+  /* Form elements */
+  .form-group { margin-bottom: 16px; }
+  .form-label { font-size: 13px; font-weight: 500; color: var(--text-secondary); margin-bottom: 6px; display: block; }
+  .form-input { width: 100%; padding: 10px 12px; border-radius: var(--radius-sm); border: 0.5px solid var(--border-md); background: var(--bg); font-size: 14px; color: var(--text-primary); outline: none; }
+  .form-input:focus { border-color: var(--teal-400); background: var(--surface); }
+  textarea.form-input { resize: vertical; min-height: 80px; }
+  select.form-input { appearance: none; cursor: pointer; }
+
+  /* Borrow request flow */
+  .borrow-detail { padding: 0 20px; }
+  .borrow-hero { background: var(--teal-50); border-radius: var(--radius-lg); padding: 24px; text-align: center; margin-bottom: 20px; }
+  .borrow-hero-emoji { font-size: 48px; margin-bottom: 8px; }
+  .borrow-hero-name { font-size: 22px; font-weight: 700; }
+  .borrow-hero-sub { font-size: 14px; color: var(--text-muted); margin-top: 4px; }
+  .detail-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 0.5px solid var(--border); font-size: 14px; }
+  .detail-row:last-of-type { border-bottom: none; }
+  .detail-label { color: var(--text-muted); }
+  .detail-val { font-weight: 500; }
+
+  /* Active borrows */
+  .borrow-card { background: var(--surface); border-radius: var(--radius-lg); border: 0.5px solid var(--border); padding: 16px; margin: 0 20px 12px; }
+  .borrow-card-top { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
+  .borrow-card-emoji { width: 46px; height: 46px; border-radius: var(--radius-sm); background: var(--teal-50); display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+  .borrow-card-name { font-size: 15px; font-weight: 600; }
+  .borrow-card-from { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+  .status-pill { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 500; }
+  .status-pending { background: var(--amber-50); color: var(--amber-600); }
+  .status-active { background: var(--teal-50); color: var(--teal-600); }
+  .status-return-req { background: var(--blue-50); color: var(--blue-600); }
+  .status-returned { background: var(--gray-50); color: var(--gray-600); }
+  .status-late { background: var(--red-50); color: var(--red-600); }
+  .status-denied { background: var(--coral-50); color: var(--coral-600); }
+  .due-bar { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; padding-top: 10px; border-top: 0.5px solid var(--border); font-size: 13px; }
+  .due-label { color: var(--text-muted); }
+  .due-val { font-weight: 500; }
+  .card-actions { display: flex; gap: 8px; margin-top: 12px; }
+
+  /* List item screen */
+  .list-form { padding: 0 20px; }
+  .emoji-picker { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-top: 8px; }
+  .emoji-opt { width: 44px; height: 44px; border-radius: var(--radius-sm); background: var(--bg); border: 1.5px solid transparent; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; transition: all 0.15s; }
+  .emoji-opt.selected { border-color: var(--teal-400); background: var(--teal-50); }
+
+  /* Lender inbox */
+  .inbox-card { background: var(--surface); border-radius: var(--radius-lg); border: 0.5px solid var(--border); padding: 16px; margin: 0 20px 12px; }
+  .inbox-card.new-req { border-left: 3px solid var(--teal-400); }
+  .inbox-top { display: flex; gap: 10px; align-items: center; margin-bottom: 8px; }
+  .inbox-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--blue-50); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; color: var(--blue-600); flex-shrink: 0; }
+  .inbox-name { font-size: 14px; font-weight: 600; }
+  .inbox-time { font-size: 12px; color: var(--text-muted); }
+  .inbox-item-line { font-size: 13px; color: var(--text-secondary); margin-bottom: 8px; }
+  .inbox-msg { font-size: 13px; color: var(--text-secondary); background: var(--bg); border-radius: var(--radius-sm); padding: 8px 10px; margin-bottom: 10px; border-left: 2px solid var(--gray-100); }
+
+  /* Profile */
+  .profile-hero { background: var(--surface); border-bottom: 0.5px solid var(--border); padding: 24px 20px 20px; text-align: center; }
+  .profile-avatar { width: 72px; height: 72px; border-radius: 50%; background: var(--teal-50); display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 700; color: var(--teal-600); margin: 0 auto 12px; border: 2px solid var(--teal-100); }
+  .profile-name { font-size: 20px; font-weight: 700; }
+  .profile-handle { font-size: 14px; color: var(--text-muted); margin-top: 2px; }
+  .trust-ring { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; background: var(--teal-50); padding: 6px 14px; border-radius: 999px; font-size: 14px; font-weight: 600; color: var(--teal-600); }
+  .stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; border-top: 0.5px solid var(--border); border-bottom: 0.5px solid var(--border); background: var(--surface); }
+  .stat-cell { padding: 16px 0; text-align: center; }
+  .stat-cell + .stat-cell { border-left: 0.5px solid var(--border); }
+  .stat-num { font-size: 22px; font-weight: 700; color: var(--text-primary); }
+  .stat-lbl { font-size: 11px; color: var(--text-muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .profile-section { padding: 20px; }
+  .profile-section-title { font-size: 13px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 12px; }
+  .listed-item { display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--surface); border-radius: var(--radius-md); border: 0.5px solid var(--border); margin-bottom: 8px; }
+  .listed-emoji { font-size: 20px; }
+  .listed-name { font-size: 14px; font-weight: 500; flex: 1; }
+
+  /* Toast */
+  .toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px); background: #1A1A18; color: #fff; padding: 10px 18px; border-radius: var(--radius-md); font-size: 14px; opacity: 0; transition: all 0.25s; z-index: 200; white-space: nowrap; pointer-events: none; }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* Empty state */
+  .empty-state { text-align: center; padding: 40px 20px; }
+  .empty-icon { font-size: 40px; color: var(--gray-200); margin-bottom: 12px; }
+  .empty-title { font-size: 16px; font-weight: 600; color: var(--text-secondary); }
+  .empty-sub { font-size: 14px; color: var(--text-muted); margin-top: 4px; }
+
+  .divider { height: 0.5px; background: var(--border); margin: 0 20px; }
+  .px20 { padding-left: 20px; padding-right: 20px; }
+  .mt12 { margin-top: 12px; }
+  .mt8 { margin-top: 8px; }
+  .mb12 { margin-bottom: 12px; }
+
+  @media (max-width: 440px) {
+    .app-shell { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-logo">Trus<span>tr</span></div>
+    <div class="topbar-actions">
+      <button class="icon-btn" onclick="openNotifs()" title="Notifications"><i class="ti ti-bell"></i></button>
+      <button class="icon-btn" onclick="navTo('profile')" title="Profile"><i class="ti ti-user-circle"></i></button>
+    </div>
+  </div>
+
+  <!-- SCREEN: BROWSE -->
+  <div id="screen-browse" class="screen">
+    <div class="search-bar">
+      <i class="ti ti-search search-icon"></i>
+      <input type="text" placeholder="Search items…" id="search-input" oninput="filterItems()">
+    </div>
+    <div class="filter-row" id="filter-row">
+      <div class="chip active" onclick="setFilter('All')">All</div>
+      <div class="chip" onclick="setFilter('Books')">Books</div>
+      <div class="chip" onclick="setFilter('Tech')">Tech</div>
+      <div class="chip" onclick="setFilter('Sports')">Sports</div>
+      <div class="chip" onclick="setFilter('School')">School</div>
+      <div class="chip" onclick="setFilter('Art')">Art</div>
+    </div>
+    <div class="items-grid" id="items-grid"></div>
+  </div>
+
+  <!-- SCREEN: BORROW (item detail + request flow) -->
+  <div id="screen-borrow" class="screen">
+    <div class="section-head">
+      <div>
+        <button class="btn btn-secondary btn-sm" onclick="navTo('browse')"><i class="ti ti-arrow-left"></i> Browse</button>
+      </div>
+    </div>
+    <div class="borrow-detail" id="borrow-detail-content"></div>
+  </div>
+
+  <!-- SCREEN: MY BORROWS -->
+  <div id="screen-borrows" class="screen">
+    <div class="section-head">
+      <div>
+        <div class="section-title">My borrows</div>
+        <div class="section-sub">Items you've requested or are borrowing</div>
+      </div>
+    </div>
+    <div id="borrows-list"></div>
+
+    <div style="height: 20px;"></div>
+    <div class="section-head" style="padding-top: 4px;">
+      <div>
+        <div class="section-title">Lender inbox</div>
+        <div class="section-sub">Requests for items you listed</div>
+      </div>
+    </div>
+    <div id="lender-inbox"></div>
+  </div>
+
+  <!-- SCREEN: LIST ITEM -->
+  <div id="screen-list" class="screen">
+    <div class="section-head">
+      <div>
+        <div class="section-title">List an item</div>
+        <div class="section-sub">Share something you're not using</div>
+      </div>
+    </div>
+    <div class="list-form">
+      <div class="form-group">
+        <label class="form-label">Item name</label>
+        <input type="text" class="form-input" id="list-name" placeholder="e.g. TI-84 Calculator">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Pick an icon</label>
+        <div class="emoji-picker" id="emoji-picker">
+          <div class="emoji-opt selected" onclick="selectEmoji(this,'📚')">📚</div>
+          <div class="emoji-opt" onclick="selectEmoji(this,'💻')">💻</div>
+          <div class="emoji-opt" onclick="selectEmoji(this,'🎒')">🎒</div>
+          <div class="emoji-opt" onclick="selectEmoji(this,'📐')">📐</div>
+          <div class="emoji-opt" onclick="selectEmoji(this,'🎨')">🎨</div>
+          <div class="emoji-opt" onclick="selectEmoji(this,'⚽')">⚽</div>
+          <div class="emoji-opt" onclick="selectEmoji(this,'🎸')">🎸</div>
+          <div class="emoji-opt" onclick="selectEmoji(this,'🔬')">🔬</div>
+          <div class="emoji-opt" onclick="selectEmoji(this,'📷')">📷</div>
+          <div class="emoji-opt" onclick="selectEmoji(this,'🎮')">🎮</div>
+          <div class="emoji-opt" onclick="selectEmoji(this,'📏')">📏</div>
+          <div class="emoji-opt" onclick="selectEmoji(this,'🧪')">🧪</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Category</label>
+        <select class="form-input" id="list-cat">
+          <option>Books</option>
+          <option>Tech</option>
+          <option>Sports</option>
+          <option>School</option>
+          <option>Art</option>
+          <option>Music</option>
+          <option>Science</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Condition</label>
+        <select class="form-input" id="list-condition">
+          <option>Like new</option>
+          <option>Good</option>
+          <option>Fair</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Max borrow duration</label>
+        <select class="form-input" id="list-duration">
+          <option>1 day</option>
+          <option>3 days</option>
+          <option selected>1 week</option>
+          <option>2 weeks</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Notes for borrower (optional)</label>
+        <textarea class="form-input" id="list-notes" placeholder="Handle with care, bring to homeroom to pick up…"></textarea>
+      </div>
+      <button class="btn btn-primary btn-block mt12" onclick="submitListing()">List item</button>
+      <div style="height: 8px;"></div>
+    </div>
+  </div>
+
+  <!-- SCREEN: PROFILE -->
+  <div id="screen-profile" class="screen">
+    <div class="profile-hero">
+      <div class="profile-avatar" id="profile-avatar">JL</div>
+      <div class="profile-name" id="profile-name">Jordan Lee</div>
+      <div class="profile-handle" id="profile-handle">@jordanlee · Grade 10</div>
+      <div class="trust-ring"><i class="ti ti-shield-check" style="font-size:16px;"></i> Trust score <span id="profile-trust">92</span></div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-cell"><div class="stat-num" id="stat-lent">8</div><div class="stat-lbl">Lent</div></div>
+      <div class="stat-cell"><div class="stat-num" id="stat-borrowed">5</div><div class="stat-lbl">Borrowed</div></div>
+      <div class="stat-cell"><div class="stat-num" id="stat-ontime">100%</div><div class="stat-lbl">On time</div></div>
+    </div>
+    <div class="profile-section">
+      <div class="profile-section-title">My listings</div>
+      <div id="my-listings"></div>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" id="nav-browse" onclick="navTo('browse')">
+      <i class="ti ti-search"></i>Browse
+    </button>
+    <button class="nav-item" id="nav-borrows" onclick="navTo('borrows')">
+      <i class="ti ti-arrows-exchange"></i>Activity
+    </button>
+    <button class="nav-item" id="nav-list" onclick="navTo('list')">
+      <i class="ti ti-circle-plus"></i>List
+    </button>
+    <button class="nav-item" id="nav-profile" onclick="navTo('profile')">
+      <i class="ti ti-user"></i>Profile
+    </button>
+  </nav>
+</div>
+
+<!-- BORROW REQUEST MODAL -->
+<div class="modal-overlay" id="borrow-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Request to borrow</div>
+    <div class="modal-sub" id="borrow-modal-sub">From Maya Chen · TI-84 Calculator</div>
+    <div class="form-group">
+      <label class="form-label">How long do you need it?</label>
+      <select class="form-input" id="borrow-duration">
+        <option>1 day</option>
+        <option>2 days</option>
+        <option selected>3 days</option>
+        <option>1 week</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Message to lender</label>
+      <textarea class="form-input" id="borrow-msg" placeholder="Hey! Could I borrow this for the math test on Thursday?"></textarea>
+    </div>
+    <div style="display:flex; gap:10px; margin-top:4px;">
+      <button class="btn btn-secondary" style="flex:1;" onclick="closeBorrowModal()">Cancel</button>
+      <button class="btn btn-primary" style="flex:2;" onclick="submitBorrowRequest()">Send request</button>
+    </div>
+  </div>
+</div>
+
+<!-- RETURN REQUEST MODAL -->
+<div class="modal-overlay" id="return-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Mark as returned</div>
+    <div class="modal-sub" id="return-modal-sub">Tell the lender you're giving it back</div>
+    <div class="form-group">
+      <label class="form-label">Condition when returning</label>
+      <select class="form-input" id="return-condition">
+        <option>Same as borrowed — all good</option>
+        <option>Minor wear, still fine</option>
+        <option>Damaged — needs note</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Note (optional)</label>
+      <textarea class="form-input" id="return-msg" placeholder="Leaving it at your locker, thanks!"></textarea>
+    </div>
+    <div style="display:flex; gap:10px; margin-top:4px;">
+      <button class="btn btn-secondary" style="flex:1;" onclick="closeReturnModal()">Cancel</button>
+      <button class="btn btn-primary" style="flex:2;" onclick="submitReturnRequest()">Send return request</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM RETURNED MODAL (lender side) -->
+<div class="modal-overlay" id="confirm-return-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Did you get it back?</div>
+    <div class="modal-sub" id="confirm-return-sub">Confirm the return to close this borrow</div>
+    <div style="display:flex; flex-direction:column; gap:10px; margin-top:8px;">
+      <button class="btn btn-primary" onclick="confirmReturn('returned')"><i class="ti ti-check"></i> Yes, returned — all good</button>
+      <button class="btn btn-danger" onclick="confirmReturn('late')"><i class="ti ti-clock"></i> Returned but late</button>
+      <button class="btn btn-danger" onclick="confirmReturn('lost')"><i class="ti ti-alert-triangle"></i> Item was lost / damaged</button>
+      <button class="btn btn-secondary" onclick="closeConfirmReturnModal()">Not yet</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const ME = 'Jordan Lee';
+const ME_HANDLE = '@jordanlee';
+
+const ITEMS = [
+  { id:1, name:'TI-84 Plus Calculator', emoji:'📐', owner:'Maya Chen', ownerInitials:'MC', category:'School', condition:'Like new', maxDays:7, available:true, trust:96, notes:'Please handle carefully, bring to Room 204 to pick up.' },
+  { id:2, name:'Canon DSLR Camera', emoji:'📷', owner:'Priya Sharma', ownerInitials:'PS', category:'Tech', condition:'Good', maxDays:3, available:true, trust:88, notes:'Comes with kit lens. Return with the lens cap on.' },
+  { id:3, name:'The Great Gatsby (novel)', emoji:'📚', owner:'Alex Kim', ownerInitials:'AK', category:'Books', condition:'Good', maxDays:14, available:false, trust:91, notes:'No highlighting please!' },
+  { id:4, name:'Watercolor set (24 colors)', emoji:'🎨', owner:'Sam Torres', ownerInitials:'ST', category:'Art', condition:'Fair', maxDays:7, available:true, trust:79, notes:'A few colors running low but usable.' },
+  { id:5, name:'Soccer cleats (size 9)', emoji:'⚽', owner:'Chris Park', ownerInitials:'CP', category:'Sports', condition:'Good', maxDays:3, available:true, trust:85, notes:'Wipe mud off before returning.' },
+  { id:6, name:'Portable Bluetooth Speaker', emoji:'🎵', owner:'Dana Wright', ownerInitials:'DW', category:'Tech', condition:'Like new', maxDays:2, available:true, trust:93, notes:'Charge before returning.' },
+  { id:7, name:'Graphing paper pad', emoji:'📏', owner:'Leo Nakamura', ownerInitials:'LN', category:'School', condition:'Like new', maxDays:7, available:true, trust:89, notes:'' },
+  { id:8, name:'Guitar (acoustic)', emoji:'🎸', owner:'Zoe Ellis', ownerInitials:'ZE', category:'Music', condition:'Good', maxDays:7, available:true, trust:82, notes:'Be gentle with the tuning pegs.' },
+];
+
+const MY_ITEMS = [
+  { id:101, name:'Python Programming Book', emoji:'📚', category:'Books', condition:'Good' },
+  { id:102, name:'Lab Safety Goggles', emoji:'🔬', category:'Science', condition:'Like new' },
+];
+
+let borrowActivities = [
+  { id:'A1', itemId:2, itemName:'Canon DSLR Camera', emoji:'📷', fromName:'Priya Sharma', fromInitials:'PS', status:'active', dueDate:'June 14', requestDate:'June 8', duration:'3 days', msg:'Need it for the yearbook club shoot!', lenderSide:false },
+  { id:'A2', itemId:5, itemName:'Soccer cleats (size 9)', emoji:'⚽', fromName:'Chris Park', fromInitials:'CP', status:'pending', dueDate:'June 12', requestDate:'June 10', duration:'2 days', msg:'For intramurals on Thursday', lenderSide:false },
+  { id:'A3', itemId:6, itemName:'Portable Bluetooth Speaker', emoji:'🎵', fromName:'Dana Wright', fromInitials:'DW', status:'returned', dueDate:'June 7', requestDate:'June 5', duration:'1 day', msg:'For a project presentation', lenderSide:false },
+];
+
+let lenderInbox = [
+  { id:'L1', itemId:101, itemName:'Python Programming Book', emoji:'📚', borrowerName:'Riley Johnson', borrowerInitials:'RJ', status:'pending', requestDate:'June 9', duration:'1 week', msg:'Reading for AP CS over the weekend!' },
+  { id:'L2', itemId:102, itemName:'Lab Safety Goggles', emoji:'🔬', borrowerName:'Finn O\'Brien', borrowerInitials:'FO', status:'active', requestDate:'June 7', duration:'2 days', msg:'For the chem lab on Monday', dueDate:'June 12' },
+];
+
+let currentItem = null;
+let returnTargetId = null;
+let confirmReturnTargetId = null;
+let selectedEmoji = '📚';
+let activeFilter = 'All';
+
+function navTo(screen) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('screen-' + screen).classList.add('active');
+  const navEl = document.getElementById('nav-' + screen);
+  if (navEl) navEl.classList.add('active');
+  if (screen === 'browse') renderItems();
+  if (screen === 'borrows') renderBorrows();
+  if (screen === 'profile') renderProfile();
+}
+
+function setFilter(cat) {
+  activeFilter = cat;
+  document.querySelectorAll('.chip').forEach(c => {
+    c.classList.toggle('active', c.textContent === cat);
+  });
+  renderItems();
+}
+
+function filterItems() { renderItems(); }
+
+function renderItems() {
+  const q = (document.getElementById('search-input').value || '').toLowerCase();
+  const grid = document.getElementById('items-grid');
+  let filtered = ITEMS.filter(item => {
+    const matchCat = activeFilter === 'All' || item.category === activeFilter;
+    const matchQ = !q || item.name.toLowerCase().includes(q) || item.owner.toLowerCase().includes(q);
+    return matchCat && matchQ;
+  });
+  if (!filtered.length) {
+    grid.innerHTML = '<div class="empty-state"><div class="empty-icon"><i class="ti ti-mood-empty"></i></div><div class="empty-title">No items found</div><div class="empty-sub">Try a different search or category</div></div>';
+    return;
+  }
+  grid.innerHTML = filtered.map(item => `
+    <div class="item-card" onclick="openItem(${item.id})">
+      <div class="item-emoji">${item.emoji}</div>
+      <div class="item-info">
+        <div class="item-name">${item.name}</div>
+        <div class="item-owner">Listed by ${item.owner}</div>
+        <div class="item-tags">
+          <span class="tag tag-cat">${item.category}</span>
+          <span class="tag ${item.available ? 'tag-avail' : 'tag-busy'}">${item.available ? 'Available' : 'On loan'}</span>
+          <span class="tag tag-cat" style="background:var(--gray-50);color:var(--gray-600);">${item.condition}</span>
+        </div>
+      </div>
+      <div class="trust-badge">
+        <div class="trust-score">${item.trust}</div>
+        <div class="trust-label">trust</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openItem(id) {
+  currentItem = ITEMS.find(i => i.id === id);
+  if (!currentItem) return;
+  const c = currentItem;
+  const alreadyRequested = borrowActivities.some(a => a.itemId === id && (a.status === 'pending' || a.status === 'active'));
+  document.getElementById('borrow-detail-content').innerHTML = `
+    <div class="borrow-hero">
+      <div class="borrow-hero-emoji">${c.emoji}</div>
+      <div class="borrow-hero-name">${c.name}</div>
+      <div class="borrow-hero-sub">Listed by ${c.owner} · Trust score <strong>${c.trust}</strong></div>
+    </div>
+    <div class="detail-row"><span class="detail-label">Category</span><span class="detail-val">${c.category}</span></div>
+    <div class="detail-row"><span class="detail-label">Condition</span><span class="detail-val">${c.condition}</span></div>
+    <div class="detail-row"><span class="detail-label">Max duration</span><span class="detail-val">${c.maxDays} day${c.maxDays > 1 ? 's' : ''}</span></div>
+    <div class="detail-row"><span class="detail-label">Status</span><span class="detail-val ${c.available ? '' : ''}">${c.available ? '🟢 Available now' : '🔴 Currently on loan'}</span></div>
+    ${c.notes ? `<div style="background:var(--amber-50);border-radius:var(--radius-md);padding:12px 14px;margin-top:8px;font-size:13px;color:var(--amber-600);"><i class="ti ti-info-circle" style="vertical-align:-2px;margin-right:4px;"></i>${c.notes}</div>` : ''}
+    <div class="mt12 mb12">
+      ${alreadyRequested
+        ? '<button class="btn btn-secondary btn-block" disabled style="opacity:0.6;">Request already sent</button>'
+        : c.available
+          ? `<button class="btn btn-primary btn-block" onclick="openBorrowModal()"><i class="ti ti-hand-stop"></i> Request to borrow</button>`
+          : '<button class="btn btn-secondary btn-block" disabled style="opacity:0.6;">Not available right now</button>'
+      }
+    </div>
+  `;
+  navTo('borrow');
+  document.getElementById('nav-browse').classList.add('active');
+}
+
+function openBorrowModal() {
+  if (!currentItem) return;
+  document.getElementById('borrow-modal-sub').textContent = `From ${currentItem.owner} · ${currentItem.name}`;
+  document.getElementById('borrow-modal').classList.add('open');
+}
+function closeBorrowModal() { document.getElementById('borrow-modal').classList.remove('open'); }
+
+function submitBorrowRequest() {
+  const dur = document.getElementById('borrow-duration').value;
+  const msg = document.getElementById('borrow-msg').value || 'Hi, could I borrow this?';
+  const dueMap = {'1 day':'June 11','2 days':'June 12','3 days':'June 13','1 week':'June 17'};
+  borrowActivities.unshift({
+    id: 'A' + Date.now(),
+    itemId: currentItem.id,
+    itemName: currentItem.name,
+    emoji: currentItem.emoji,
+    fromName: currentItem.owner,
+    fromInitials: currentItem.ownerInitials,
+    status: 'pending',
+    dueDate: dueMap[dur] || 'June 17',
+    requestDate: 'June 10',
+    duration: dur,
+    msg: msg,
+    lenderSide: false,
+  });
+  closeBorrowModal();
+  showToast('Request sent to ' + currentItem.owner + ' ✓');
+  document.getElementById('borrow-msg').value = '';
+  navTo('borrows');
+}
+
+function renderBorrows() {
+  const list = document.getElementById('borrows-list');
+  if (!borrowActivities.length) {
+    list.innerHTML = '<div class="empty-state"><div class="empty-icon"><i class="ti ti-package"></i></div><div class="empty-title">No borrows yet</div><div class="empty-sub">Browse items and send a request</div></div>';
+  } else {
+    list.innerHTML = borrowActivities.map(a => {
+      const statusMap = {pending:'status-pending',active:'status-active',returned:'status-returned','return-requested':'status-return-req',late:'status-late',denied:'status-denied'};
+      const labelMap = {pending:'Pending approval',active:'Active borrow','return-requested':'Return requested',returned:'Returned',late:'Returned late',denied:'Denied'};
+      const actions = [];
+      if (a.status === 'active') {
+        actions.push(`<button class="btn btn-secondary btn-sm" onclick="openReturnModal('${a.id}')"><i class="ti ti-package-import"></i> Return item</button>`);
+      }
+      return `
+        <div class="borrow-card">
+          <div class="borrow-card-top">
+            <div class="borrow-card-emoji">${a.emoji}</div>
+            <div style="flex:1;">
+              <div class="borrow-card-name">${a.itemName}</div>
+              <div class="borrow-card-from">From ${a.fromName}</div>
+            </div>
+            <span class="status-pill ${statusMap[a.status]}">${labelMap[a.status]}</span>
+          </div>
+          ${a.status !== 'returned' && a.status !== 'late' && a.status !== 'denied' ? `<div class="due-bar"><span class="due-label">Due by</span><span class="due-val">${a.dueDate}</span></div>` : ''}
+          ${actions.length ? `<div class="card-actions">${actions.join('')}</div>` : ''}
+        </div>
+      `;
+    }).join('');
+  }
+
+  const inbox = document.getElementById('lender-inbox');
+  if (!lenderInbox.length) {
+    inbox.innerHTML = '<div class="empty-state"><div class="empty-icon"><i class="ti ti-inbox"></i></div><div class="empty-title">Inbox empty</div><div class="empty-sub">When someone requests your items, they appear here</div></div>';
+  } else {
+    inbox.innerHTML = lenderInbox.map(l => {
+      const statusMap = {pending:'status-pending',active:'status-active','return-requested':'status-return-req',returned:'status-returned'};
+      const labelMap = {pending:'Awaiting your response',active:'Out on loan','return-requested':'Borrower returning',returned:'Complete'};
+      const actions = [];
+      if (l.status === 'pending') {
+        actions.push(`<button class="btn btn-primary btn-sm" onclick="lenderRespond('${l.id}','accept')"><i class="ti ti-check"></i> Accept</button>`);
+        actions.push(`<button class="btn btn-danger btn-sm" onclick="lenderRespond('${l.id}','deny')"><i class="ti ti-x"></i> Deny</button>`);
+      }
+      if (l.status === 'return-requested') {
+        actions.push(`<button class="btn btn-secondary btn-sm" onclick="openConfirmReturn('${l.id}')"><i class="ti ti-package-check"></i> Confirm received</button>`);
+      }
+      return `
+        <div class="inbox-card ${l.status === 'pending' ? 'new-req' : ''}">
+          <div class="inbox-top">
+            <div class="inbox-avatar">${l.borrowerInitials}</div>
+            <div style="flex:1;">
+              <div class="inbox-name">${l.borrowerName}</div>
+              <div class="inbox-time">Requested ${l.requestDate} · ${l.duration}</div>
+            </div>
+            <span class="status-pill ${statusMap[l.status]}">${labelMap[l.status]}</span>
+          </div>
+          <div class="inbox-item-line"><i class="ti ti-package" style="font-size:14px;vertical-align:-2px;margin-right:4px;color:var(--text-muted);"></i>${l.itemName} ${l.emoji}</div>
+          ${l.msg ? `<div class="inbox-msg">"${l.msg}"</div>` : ''}
+          ${actions.length ? `<div class="card-actions">${actions.join('')}</div>` : ''}
+        </div>
+      `;
+    }).join('');
+  }
+}
+
+function lenderRespond(id, action) {
+  const idx = lenderInbox.findIndex(l => l.id === id);
+  if (idx === -1) return;
+  if (action === 'accept') {
+    lenderInbox[idx].status = 'active';
+    lenderInbox[idx].dueDate = 'June 17';
+    showToast('Request accepted — item is now on loan');
+  } else {
+    lenderInbox[idx].status = 'denied';
+    showToast('Request denied');
+  }
+  renderBorrows();
+}
+
+function openReturnModal(id) {
+  returnTargetId = id;
+  const a = borrowActivities.find(x => x.id === id);
+  if (a) document.getElementById('return-modal-sub').textContent = `Returning "${a.itemName}" to ${a.fromName}`;
+  document.getElementById('return-modal').classList.add('open');
+}
+function closeReturnModal() { document.getElementById('return-modal').classList.remove('open'); returnTargetId = null; }
+
+function submitReturnRequest() {
+  const idx = borrowActivities.findIndex(a => a.id === returnTargetId);
+  if (idx !== -1) {
+    borrowActivities[idx].status = 'return-requested';
+    const matchLender = lenderInbox.find(l => l.itemName === borrowActivities[idx].itemName);
+    if (matchLender) matchLender.status = 'return-requested';
+  }
+  closeReturnModal();
+  showToast('Return request sent ✓');
+  renderBorrows();
+}
+
+function openConfirmReturn(id) {
+  confirmReturnTargetId = id;
+  const l = lenderInbox.find(x => x.id === id);
+  if (l) document.getElementById('confirm-return-sub').textContent = `"${l.itemName}" from ${l.borrowerName}`;
+  document.getElementById('confirm-return-modal').classList.add('open');
+}
+function closeConfirmReturnModal() { document.getElementById('confirm-return-modal').classList.remove('open'); confirmReturnTargetId = null; }
+
+function confirmReturn(result) {
+  const lIdx = lenderInbox.findIndex(l => l.id === confirmReturnTargetId);
+  if (lIdx !== -1) {
+    const itemName = lenderInbox[lIdx].itemName;
+    lenderInbox[lIdx].status = result;
+    const bIdx = borrowActivities.findIndex(a => a.itemName === itemName);
+    if (bIdx !== -1) borrowActivities[bIdx].status = result;
+    if (result === 'returned') showToast('Item marked returned — trust score updated ✓');
+    else if (result === 'late') showToast('Marked returned late');
+    else showToast('Item marked as lost — review started');
+  }
+  closeConfirmReturnModal();
+  renderBorrows();
+}
+
+function selectEmoji(el, em) {
+  document.querySelectorAll('.emoji-opt').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedEmoji = em;
+}
+
+function submitListing() {
+  const name = document.getElementById('list-name').value.trim();
+  if (!name) { showToast('Give your item a name first'); return; }
+  const cat = document.getElementById('list-cat').value;
+  const condition = document.getElementById('list-condition').value;
+  MY_ITEMS.push({ id: 200 + MY_ITEMS.length, name, emoji: selectedEmoji, category: cat, condition });
+  ITEMS.push({
+    id: 100 + ITEMS.length, name, emoji: selectedEmoji, owner: ME, ownerInitials: 'JL',
+    category: cat, condition, maxDays: 7, available: true, trust: 92,
+    notes: document.getElementById('list-notes').value
+  });
+  document.getElementById('list-name').value = '';
+  document.getElementById('list-notes').value = '';
+  showToast(name + ' listed successfully ✓');
+  navTo('browse');
+}
+
+function renderProfile() {
+  document.getElementById('my-listings').innerHTML = MY_ITEMS.map(i => `
+    <div class="listed-item">
+      <div class="listed-emoji">${i.emoji}</div>
+      <div class="listed-name">${i.name}</div>
+      <span class="tag tag-cat">${i.category}</span>
+      <span class="tag" style="background:var(--gray-50);color:var(--gray-600);">${i.condition}</span>
+    </div>
+  `).join('');
+}
+
+function openNotifs() {
+  showToast('No new notifications');
+}
+
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', (e) => { if (e.target === m) m.classList.remove('open'); });
+});
+
+renderItems();
+renderProfile();
+</script>
+</body>
+</html>
