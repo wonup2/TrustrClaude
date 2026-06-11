@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Trustr</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -79,8 +79,8 @@
     display: flex;
     z-index: 20;
   }
-  .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; cursor: pointer; color: var(--text-muted); font-size: 10px; font-weight: 500; letter-spacing: 0.3px; transition: color 0.15s; border: none; background: transparent; }
-  .nav-item i { font-size: 22px; }
+  .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; cursor: pointer; color: var(--text-muted); font-size: 11px; font-weight: 500; letter-spacing: 0.3px; transition: color 0.15s; border: none; background: transparent; }
+  .nav-item .nav-icon { font-size: 20px; line-height: 1; }
   .nav-item.active { color: var(--teal-600); }
   .nav-item:hover { color: var(--teal-400); }
 
@@ -238,15 +238,15 @@
   <div class="topbar">
     <div class="topbar-logo">Trus<span>tr</span></div>
     <div class="topbar-actions">
-      <button class="icon-btn" onclick="openNotifs()" title="Notifications"><i class="ti ti-bell"></i></button>
-      <button class="icon-btn" onclick="navTo('profile')" title="Profile"><i class="ti ti-user-circle"></i></button>
+      <button class="icon-btn" onclick="openNotifs()" title="Notifications">🔔</button>
+      <button class="icon-btn" onclick="navTo('profile')" title="Profile">👤</button>
     </div>
   </div>
 
   <!-- SCREEN: BROWSE -->
   <div id="screen-browse" class="screen">
     <div class="search-bar">
-      <i class="ti ti-search search-icon"></i>
+      <span class="search-icon" style="font-size:14px;">🔍</span>
       <input type="text" placeholder="Search items…" id="search-input" oninput="filterItems()">
     </div>
     <div class="filter-row" id="filter-row">
@@ -257,14 +257,23 @@
       <div class="chip" onclick="setFilter('School')">School</div>
       <div class="chip" onclick="setFilter('Art')">Art</div>
     </div>
-    <div class="items-grid" id="items-grid"></div>
+    <div class="items-grid" id="items-grid">
+      <div class="item-card" onclick="openItem(1)"><div class="item-emoji">📐</div><div class="item-info"><div class="item-name">TI-84 Plus Calculator</div><div class="item-owner">Listed by Maya Chen</div><div class="item-tags"><span class="tag tag-cat">School</span><span class="tag tag-avail">Available</span><span class="tag" style="background:var(--gray-50);color:var(--gray-600);">Like new</span></div></div><div class="trust-badge"><div class="trust-score">96</div><div class="trust-label">trust</div></div></div>
+      <div class="item-card" onclick="openItem(2)"><div class="item-emoji">📷</div><div class="item-info"><div class="item-name">Canon DSLR Camera</div><div class="item-owner">Listed by Priya Sharma</div><div class="item-tags"><span class="tag tag-cat">Tech</span><span class="tag tag-avail">Available</span><span class="tag" style="background:var(--gray-50);color:var(--gray-600);">Good</span></div></div><div class="trust-badge"><div class="trust-score">88</div><div class="trust-label">trust</div></div></div>
+      <div class="item-card" onclick="openItem(3)"><div class="item-emoji">📚</div><div class="item-info"><div class="item-name">The Great Gatsby</div><div class="item-owner">Listed by Alex Kim</div><div class="item-tags"><span class="tag tag-cat">Books</span><span class="tag tag-busy">On loan</span><span class="tag" style="background:var(--gray-50);color:var(--gray-600);">Good</span></div></div><div class="trust-badge"><div class="trust-score">91</div><div class="trust-label">trust</div></div></div>
+      <div class="item-card" onclick="openItem(4)"><div class="item-emoji">🎨</div><div class="item-info"><div class="item-name">Watercolor set (24 colors)</div><div class="item-owner">Listed by Sam Torres</div><div class="item-tags"><span class="tag tag-cat">Art</span><span class="tag tag-avail">Available</span><span class="tag" style="background:var(--gray-50);color:var(--gray-600);">Fair</span></div></div><div class="trust-badge"><div class="trust-score">79</div><div class="trust-label">trust</div></div></div>
+      <div class="item-card" onclick="openItem(5)"><div class="item-emoji">⚽</div><div class="item-info"><div class="item-name">Soccer cleats (size 9)</div><div class="item-owner">Listed by Chris Park</div><div class="item-tags"><span class="tag tag-cat">Sports</span><span class="tag tag-avail">Available</span><span class="tag" style="background:var(--gray-50);color:var(--gray-600);">Good</span></div></div><div class="trust-badge"><div class="trust-score">85</div><div class="trust-label">trust</div></div></div>
+      <div class="item-card" onclick="openItem(6)"><div class="item-emoji">🎵</div><div class="item-info"><div class="item-name">Portable Bluetooth Speaker</div><div class="item-owner">Listed by Dana Wright</div><div class="item-tags"><span class="tag tag-cat">Tech</span><span class="tag tag-avail">Available</span><span class="tag" style="background:var(--gray-50);color:var(--gray-600);">Like new</span></div></div><div class="trust-badge"><div class="trust-score">93</div><div class="trust-label">trust</div></div></div>
+      <div class="item-card" onclick="openItem(7)"><div class="item-emoji">📏</div><div class="item-info"><div class="item-name">Graphing paper pad</div><div class="item-owner">Listed by Leo Nakamura</div><div class="item-tags"><span class="tag tag-cat">School</span><span class="tag tag-avail">Available</span><span class="tag" style="background:var(--gray-50);color:var(--gray-600);">Like new</span></div></div><div class="trust-badge"><div class="trust-score">89</div><div class="trust-label">trust</div></div></div>
+      <div class="item-card" onclick="openItem(8)"><div class="item-emoji">🎸</div><div class="item-info"><div class="item-name">Guitar (acoustic)</div><div class="item-owner">Listed by Zoe Ellis</div><div class="item-tags"><span class="tag tag-cat">Music</span><span class="tag tag-avail">Available</span><span class="tag" style="background:var(--gray-50);color:var(--gray-600);">Good</span></div></div><div class="trust-badge"><div class="trust-score">82</div><div class="trust-label">trust</div></div></div>
+    </div>
   </div>
 
   <!-- SCREEN: BORROW (item detail + request flow) -->
   <div id="screen-borrow" class="screen">
     <div class="section-head">
       <div>
-        <button class="btn btn-secondary btn-sm" onclick="navTo('browse')"><i class="ti ti-arrow-left"></i> Browse</button>
+        <button class="btn btn-secondary btn-sm" onclick="navTo('browse')">← Browse</button>
       </div>
     </div>
     <div class="borrow-detail" id="borrow-detail-content"></div>
@@ -365,7 +374,7 @@
       <div class="profile-avatar" id="profile-avatar">JL</div>
       <div class="profile-name" id="profile-name">Jordan Lee</div>
       <div class="profile-handle" id="profile-handle">@jordanlee · Grade 10</div>
-      <div class="trust-ring"><i class="ti ti-shield-check" style="font-size:16px;"></i> Trust score <span id="profile-trust">92</span></div>
+      <div class="trust-ring">🛡 Trust score <span id="profile-trust">92</span></div>
     </div>
     <div class="stats-row">
       <div class="stat-cell"><div class="stat-num" id="stat-lent">8</div><div class="stat-lbl">Lent</div></div>
@@ -381,16 +390,16 @@
   <!-- BOTTOM NAV -->
   <nav class="bottom-nav">
     <button class="nav-item active" id="nav-browse" onclick="navTo('browse')">
-      <i class="ti ti-search"></i>Browse
+      <span class="nav-icon">🔍</span>Browse
     </button>
     <button class="nav-item" id="nav-borrows" onclick="navTo('borrows')">
-      <i class="ti ti-arrows-exchange"></i>Activity
+      <span class="nav-icon">⇄</span>Activity
     </button>
     <button class="nav-item" id="nav-list" onclick="navTo('list')">
-      <i class="ti ti-circle-plus"></i>List
+      <span class="nav-icon">＋</span>List
     </button>
     <button class="nav-item" id="nav-profile" onclick="navTo('profile')">
-      <i class="ti ti-user"></i>Profile
+      <span class="nav-icon">👤</span>Profile
     </button>
   </nav>
 </div>
@@ -453,9 +462,9 @@
     <div class="modal-title">Did you get it back?</div>
     <div class="modal-sub" id="confirm-return-sub">Confirm the return to close this borrow</div>
     <div style="display:flex; flex-direction:column; gap:10px; margin-top:8px;">
-      <button class="btn btn-primary" onclick="confirmReturn('returned')"><i class="ti ti-check"></i> Yes, returned — all good</button>
-      <button class="btn btn-danger" onclick="confirmReturn('late')"><i class="ti ti-clock"></i> Returned but late</button>
-      <button class="btn btn-danger" onclick="confirmReturn('lost')"><i class="ti ti-alert-triangle"></i> Item was lost / damaged</button>
+      <button class="btn btn-primary" onclick="confirmReturn('returned')">✓ Yes, returned — all good</button>
+      <button class="btn btn-danger" onclick="confirmReturn('late')">⏱ Returned but late</button>
+      <button class="btn btn-danger" onclick="confirmReturn('lost')">⚠ Item was lost / damaged</button>
       <button class="btn btn-secondary" onclick="closeConfirmReturnModal()">Not yet</button>
     </div>
   </div>
@@ -464,6 +473,7 @@
 <div class="toast" id="toast"></div>
 
 <script>
+try {
 const ME = 'Jordan Lee';
 const ME_HANDLE = '@jordanlee';
 
@@ -524,13 +534,15 @@ function filterItems() { renderItems(); }
 function renderItems() {
   const q = (document.getElementById('search-input').value || '').toLowerCase();
   const grid = document.getElementById('items-grid');
+  // If no filter/search active, leave the static HTML cards as-is
+  if (activeFilter === 'All' && !q) return;
   let filtered = ITEMS.filter(item => {
     const matchCat = activeFilter === 'All' || item.category === activeFilter;
     const matchQ = !q || item.name.toLowerCase().includes(q) || item.owner.toLowerCase().includes(q);
     return matchCat && matchQ;
   });
   if (!filtered.length) {
-    grid.innerHTML = '<div class="empty-state"><div class="empty-icon"><i class="ti ti-mood-empty"></i></div><div class="empty-title">No items found</div><div class="empty-sub">Try a different search or category</div></div>';
+    grid.innerHTML = '<div class="empty-state"><div class="empty-icon">😶</div><div class="empty-title">No items found</div><div class="empty-sub">Try a different search or category</div></div>';
     return;
   }
   grid.innerHTML = filtered.map(item => `
@@ -568,12 +580,12 @@ function openItem(id) {
     <div class="detail-row"><span class="detail-label">Condition</span><span class="detail-val">${c.condition}</span></div>
     <div class="detail-row"><span class="detail-label">Max duration</span><span class="detail-val">${c.maxDays} day${c.maxDays > 1 ? 's' : ''}</span></div>
     <div class="detail-row"><span class="detail-label">Status</span><span class="detail-val ${c.available ? '' : ''}">${c.available ? '🟢 Available now' : '🔴 Currently on loan'}</span></div>
-    ${c.notes ? `<div style="background:var(--amber-50);border-radius:var(--radius-md);padding:12px 14px;margin-top:8px;font-size:13px;color:var(--amber-600);"><i class="ti ti-info-circle" style="vertical-align:-2px;margin-right:4px;"></i>${c.notes}</div>` : ''}
+    ${c.notes ? `<div style="background:var(--amber-50);border-radius:var(--radius-md);padding:12px 14px;margin-top:8px;font-size:13px;color:var(--amber-600);">ℹ ${c.notes}</div>` : ''}
     <div class="mt12 mb12">
       ${alreadyRequested
         ? '<button class="btn btn-secondary btn-block" disabled style="opacity:0.6;">Request already sent</button>'
         : c.available
-          ? `<button class="btn btn-primary btn-block" onclick="openBorrowModal()"><i class="ti ti-hand-stop"></i> Request to borrow</button>`
+          ? `<button class="btn btn-primary btn-block" onclick="openBorrowModal()">✋ Request to borrow</button>`
           : '<button class="btn btn-secondary btn-block" disabled style="opacity:0.6;">Not available right now</button>'
       }
     </div>
@@ -616,14 +628,14 @@ function submitBorrowRequest() {
 function renderBorrows() {
   const list = document.getElementById('borrows-list');
   if (!borrowActivities.length) {
-    list.innerHTML = '<div class="empty-state"><div class="empty-icon"><i class="ti ti-package"></i></div><div class="empty-title">No borrows yet</div><div class="empty-sub">Browse items and send a request</div></div>';
+    list.innerHTML = '<div class="empty-state"><div class="empty-icon">📦</div><div class="empty-title">No borrows yet</div><div class="empty-sub">Browse items and send a request</div></div>';
   } else {
     list.innerHTML = borrowActivities.map(a => {
       const statusMap = {pending:'status-pending',active:'status-active',returned:'status-returned','return-requested':'status-return-req',late:'status-late',denied:'status-denied'};
       const labelMap = {pending:'Pending approval',active:'Active borrow','return-requested':'Return requested',returned:'Returned',late:'Returned late',denied:'Denied'};
       const actions = [];
       if (a.status === 'active') {
-        actions.push(`<button class="btn btn-secondary btn-sm" onclick="openReturnModal('${a.id}')"><i class="ti ti-package-import"></i> Return item</button>`);
+        actions.push(`<button class="btn btn-secondary btn-sm" onclick="openReturnModal('${a.id}')">↩ Return item</button>`);
       }
       return `
         <div class="borrow-card">
@@ -644,18 +656,18 @@ function renderBorrows() {
 
   const inbox = document.getElementById('lender-inbox');
   if (!lenderInbox.length) {
-    inbox.innerHTML = '<div class="empty-state"><div class="empty-icon"><i class="ti ti-inbox"></i></div><div class="empty-title">Inbox empty</div><div class="empty-sub">When someone requests your items, they appear here</div></div>';
+    inbox.innerHTML = '<div class="empty-state"><div class="empty-icon">📥</div><div class="empty-title">Inbox empty</div><div class="empty-sub">When someone requests your items, they appear here</div></div>';
   } else {
     inbox.innerHTML = lenderInbox.map(l => {
       const statusMap = {pending:'status-pending',active:'status-active','return-requested':'status-return-req',returned:'status-returned'};
       const labelMap = {pending:'Awaiting your response',active:'Out on loan','return-requested':'Borrower returning',returned:'Complete'};
       const actions = [];
       if (l.status === 'pending') {
-        actions.push(`<button class="btn btn-primary btn-sm" onclick="lenderRespond('${l.id}','accept')"><i class="ti ti-check"></i> Accept</button>`);
-        actions.push(`<button class="btn btn-danger btn-sm" onclick="lenderRespond('${l.id}','deny')"><i class="ti ti-x"></i> Deny</button>`);
+        actions.push(`<button class="btn btn-primary btn-sm" onclick="lenderRespond('${l.id}','accept')">✓ Accept</button>`);
+        actions.push(`<button class="btn btn-danger btn-sm" onclick="lenderRespond('${l.id}','deny')">✕ Deny</button>`);
       }
       if (l.status === 'return-requested') {
-        actions.push(`<button class="btn btn-secondary btn-sm" onclick="openConfirmReturn('${l.id}')"><i class="ti ti-package-check"></i> Confirm received</button>`);
+        actions.push(`<button class="btn btn-secondary btn-sm" onclick="openConfirmReturn('${l.id}')">✓ Confirm received</button>`);
       }
       return `
         <div class="inbox-card ${l.status === 'pending' ? 'new-req' : ''}">
@@ -667,7 +679,7 @@ function renderBorrows() {
             </div>
             <span class="status-pill ${statusMap[l.status]}">${labelMap[l.status]}</span>
           </div>
-          <div class="inbox-item-line"><i class="ti ti-package" style="font-size:14px;vertical-align:-2px;margin-right:4px;color:var(--text-muted);"></i>${l.itemName} ${l.emoji}</div>
+          <div class="inbox-item-line">📦 ${l.itemName} ${l.emoji}</div>
           ${l.msg ? `<div class="inbox-msg">"${l.msg}"</div>` : ''}
           ${actions.length ? `<div class="card-actions">${actions.join('')}</div>` : ''}
         </div>
@@ -784,8 +796,8 @@ document.querySelectorAll('.modal-overlay').forEach(m => {
   m.addEventListener('click', (e) => { if (e.target === m) m.classList.remove('open'); });
 });
 
-renderItems();
-renderProfile();
+try { renderProfile(); } catch(e) {}
+} catch(globalErr) { console.warn('Trustr init error:', globalErr); }
 </script>
 </body>
 </html>
