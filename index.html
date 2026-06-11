@@ -250,7 +250,7 @@
   </div>
 
   <!-- SCREEN: BROWSE -->
-  <div id="screen-browse" class="screen active">
+  <div id="screen-browse" class="screen">
     <div style="padding:16px 20px 4px;">
       <div style="font-size:13px;color:var(--text-muted);margin-bottom:2px;">Hey, Milan 👋</div>
       <div style="font-size:21px;font-weight:700;color:var(--text-primary);line-height:1.2;">Need something?<br>Borrow it from a classmate!</div>
@@ -386,7 +386,7 @@
   </div>
 
   <!-- SCREEN: PROFILE -->
-  <div id="screen-profile" class="screen">
+  <div id="screen-profile" class="screen active">
     <div class="profile-hero">
       <div class="profile-avatar" id="profile-avatar">MK</div>
       <div class="profile-name" id="profile-name">Milan Kuruvilla</div>
@@ -455,7 +455,7 @@
 
   <!-- BOTTOM NAV -->
   <nav class="bottom-nav">
-    <button class="nav-item active" id="nav-browse" onclick="navTo('browse')">
+    <button class="nav-item" id="nav-browse" onclick="navTo('browse')">
       <span class="nav-icon">🔍</span>Browse
     </button>
     <button class="nav-item" id="nav-borrows" onclick="navTo('borrows')">
@@ -464,7 +464,7 @@
     <button class="nav-item" id="nav-list" onclick="navTo('list')">
       <span class="nav-icon">＋</span>List
     </button>
-    <button class="nav-item" id="nav-profile" onclick="navTo('profile')">
+    <button class="nav-item active" id="nav-profile" onclick="navTo('profile')">
       <span class="nav-icon">👤</span>Profile
     </button>
   </nav>
